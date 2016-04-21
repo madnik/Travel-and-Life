@@ -1,3 +1,0 @@
-User-agent: *
-Sitemap: https://travel.madnik.space/sitemap.xml
-Disallow: /ghost/
