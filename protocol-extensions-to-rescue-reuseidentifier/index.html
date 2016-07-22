@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from localhost:2368/protocol-extensions-to-rescue-reuseidentifier/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 22 Jul 2016 04:44:14 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <title>Protocol Extensions to Rescue - reuseIdentifier</title>
+    <meta name="description" content="" />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="../favicon.ico">
+
+    <link rel="stylesheet" type="text/css" href="../assets/css/prism0ba4.css?v=46543ac229" />
+    <link rel="stylesheet" type="text/css" href="../assets/css/screen0ba4.css?v=46543ac229" />
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+
+    <link rel="canonical" href="index.html" />
+    <meta name="referrer" content="origin" />
+    
+    <meta property="og:site_name" content="Swift - The Programming Language" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Protocol Extensions to Rescue - reuseIdentifier" />
+    <meta property="og:description" content="This post is one of the chain posts that discuss the use cases of swift protocol extensions.  Recently natashatherobot discussed this topic in one of her talk.  reuseIdentifier - not a new term for iOS developers. We always meet this at UITableViewCell. reuseIdentifier is part of the cell reusing mechanism" />
+    <meta property="og:url" content="index.html" />
+    <meta property="article:published_time" content="2016-06-29T14:11:06.194Z" />
+    <meta property="article:modified_time" content="2016-06-29T14:11:06.193Z" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Protocol Extensions to Rescue - reuseIdentifier" />
+    <meta name="twitter:description" content="This post is one of the chain posts that discuss the use cases of swift protocol extensions.  Recently natashatherobot discussed this topic in one of her talk.  reuseIdentifier - not a new term for iOS developers. We always meet this at UITableViewCell. reuseIdentifier is part of the cell reusing mechanism" />
+    <meta name="twitter:url" content="index.html" />
+    <meta name="twitter:label1" content="Written by" />
+    <meta name="twitter:data1" content="Madushan" />
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Swift - The Programming Language",
+        "logo": "https://travel.madnik.space/ghost/img/ghosticon.jpg"
+    },
+    "author": {
+        "@type": "Person",
+        "name": "Madushan",
+        "url": "https://travel.madnik.space/author/madushan/",
+        "sameAs": []
+    },
+    "headline": "Protocol Extensions to Rescue - reuseIdentifier",
+    "url": "https://travel.madnik.space/protocol-extensions-to-rescue-reuseidentifier/",
+    "datePublished": "2016-06-29T14:11:06.194Z",
+    "dateModified": "2016-06-29T14:11:06.193Z",
+    "description": "This post is one of the chain posts that discuss the use cases of swift protocol extensions.  Recently natashatherobot discussed this topic in one of her talk.  reuseIdentifier - not a new term for iOS developers. We always meet this at UITableViewCell. reuseIdentifier is part of the cell reusing mechanism"
+}
+    </script>
+
+    <meta name="generator" content="Ghost 0.8" />
+    <link rel="alternate" type="application/rss+xml" title="Swift - The Programming Language" href="../rss/index.html" />
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-79831393-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
+</head>
+<body class="post-template nav-closed">
+
+    <div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
+            <li class="nav-home" role="presentation"><a href="../index.html">Home</a></li>
+    </ul>
+        <a class="subscribe-button icon-feed" href="../rss/index.html">Subscribe</a>
+</div>
+<span class="nav-cover"></span>
+
+
+    <div class="site-wrapper">
+
+        
+
+
+<header class="main-header post-head no-cover">
+    <nav class="main-nav  clearfix">
+        
+            <a class="menu-button icon-menu" href="#"><span class="word">Menu</span></a>
+    </nav>
+</header>
+
+<main class="content" role="main">
+    <article class="post">
+
+        <header class="post-header">
+            <h1 class="post-title">Protocol Extensions to Rescue - reuseIdentifier</h1>
+            <section class="post-meta">
+                <time class="post-date" datetime="2016-06-29">29 June 2016</time> 
+            </section>
+        </header>
+
+        <section class="post-content">
+            <p>This post is one of the chain posts that discuss the use cases of swift protocol extensions. </p>
+
+<p>Recently <a href="https://twitter.com/natashatherobot">natashatherobot</a> discussed this topic in one of her <a href="https://realm.io/news/appbuilders-natasha-muraschev-practical-protocol-oriented-programming/">talk</a>. </p>
+
+<p>reuseIdentifier - not a new term for iOS developers. We always meet this at <code>UITableViewCell</code>. reuseIdentifier is part of the cell reusing mechanism of UIKit. We give a cell a identifier that can be used to fetch a used cell instance again to reuse with new cell. This is a String typically the name of the subclass of <code>UITableViewCell</code></p>
+
+<h4 id="useprotocolextensiontogiveadefaultimplementationofreuseidentifer">Use protocol extension to give a default implementation of reuseIdentifer.</h4>
+
+<pre><code class="language-swift">protocol ReusableView: class{}
+
+extension ReusableView where Self: UIView{  
+    static var reuseIdentifier: String{
+        return String(self)
+    }
+}
+</code></pre>
+
+<p>How cool is that. Let me explain.</p>
+
+<h5 id="reusableviewclass"><code>ReusableView: class</code></h5>
+
+<p>This means the protocol ReusableView is class only protocol. Remember,By default Swift protocol can be implemented by structures and enumerations as well. You can limit a protocol to be implemented by class type only using this.</p>
+
+<h5 id="whereself"><code>where Self:</code></h5>
+
+<p>Self is determined at compile-time, not runtime and represent the class that implement <code>ReusableView</code> protocol.</p>
+
+<h5 id="stringself"><code>String(self)</code></h5>
+
+<p>This is swift equivalent of NSStringFromClass. Get the String value of class name.</p>
+
+<p>We solved it once and for all. </p>
+
+<pre><code class="language-swift">class MyTableCell: UITableViewCell,ReusableView{  
+}
+
+MyTableViewCell.reuseIdentifer //"MyTableCell"  
+</code></pre>
+        </section>
+
+        <footer class="post-footer">
+
+
+
+            <section class="author">
+                <h4><a href="../author/madushan/index.html">Madushan</a></h4>
+
+                    <p>Read <a href="../author/madushan/index.html">more posts</a> by this author.</p>
+                <div class="author-meta">
+                    
+                    
+                </div>
+            </section>
+
+
+            <section class="share">
+                <h4>Share this post</h4>
+                <a class="icon-twitter" href="https://twitter.com/intent/tweet?text=Protocol%20Extensions%20to%20Rescue%20-%20reuseIdentifier&amp;url=https://travel.madnik.space/protocol-extensions-to-rescue-reuseidentifier/"
+                    onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                    <span class="hidden">Twitter</span>
+                </a>
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=https://travel.madnik.space/protocol-extensions-to-rescue-reuseidentifier/"
+                    onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                    <span class="hidden">Facebook</span>
+                </a>
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=https://travel.madnik.space/protocol-extensions-to-rescue-reuseidentifier/"
+                   onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+                    <span class="hidden">Google+</span>
+                </a>
+            </section>
+
+
+        </footer>
+
+    </article>
+</main>
+
+<aside class="read-next">
+    <a class="read-next-story no-cover" href="../indirect-enums-and-indirect-enum-cases-recursive-enum-enum-is-not-marked-as-indirect/index.html">
+        <section class="post">
+            <h2>Indirect Enums and Indirect Enum cases - Recursive enum Enum is not marked as indirect</h2>
+            <p>Recursive enum AEnum is not marked as indirect Have encountered this error?  What is this indirect keyword. Why we&hellip;</p>
+        </section>
+    </a>
+    <a class="read-next-story prev no-cover" href="../im-swift-function-i-have-many-faces-2/index.html">
+        <section class="post">
+            <h2>I&#x27;m Swift function. I have many faces - Default parameter values</h2>
+            <p>Default Parameter Values Swift functions can have default parameter values. This is done by assigning a parameter value after&hellip;</p>
+        </section>
+    </a>
+</aside>
+
+
+
+        <footer class="site-footer clearfix">
+            <section class="copyright"><a href="../index.html">Swift - The Programming Language</a> &copy; 2016</section>
+            <section class="poweredby">Proudly published with <a href="https://ghost.org/">Ghost</a></section>
+        </footer>
+
+    </div>
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+    
+    <script type="text/javascript" src="../assets/js/jquery.fitvids0ba4.js?v=46543ac229"></script>
+    <script type="text/javascript" src="../assets/js/index0ba4.js?v=46543ac229"></script>
+    <script type="text/javascript" src="../assets/js/prism0ba4.js?v=46543ac229"></script>
+</body>
+
+<!-- Mirrored from localhost:2368/protocol-extensions-to-rescue-reuseidentifier/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 22 Jul 2016 04:44:14 GMT -->
+</html>
